@@ -16,9 +16,29 @@ class $AssetsImagesGen {
 class $AssetsImagesPngGen {
   const $AssetsImagesPngGen();
 
+  /// File path: assets/images/png/add_to_cart.png
+  AssetGenImage get addToCart =>
+      const AssetGenImage('assets/images/png/add_to_cart.png');
+
+  /// File path: assets/images/png/filter.png
+  AssetGenImage get filter =>
+      const AssetGenImage('assets/images/png/filter.png');
+
   /// File path: assets/images/png/logo_wtf.png
   AssetGenImage get logoWtf =>
       const AssetGenImage('assets/images/png/logo_wtf.png');
+
+  /// File path: assets/images/png/magnifier.png
+  AssetGenImage get magnifier =>
+      const AssetGenImage('assets/images/png/magnifier.png');
+
+  /// File path: assets/images/png/shopping_cart.png
+  AssetGenImage get shoppingCart =>
+      const AssetGenImage('assets/images/png/shopping_cart.png');
+
+  /// File path: assets/images/png/soramitsu_logo.png
+  AssetGenImage get soramitsuLogo =>
+      const AssetGenImage('assets/images/png/soramitsu_logo.png');
 }
 
 class Assets {
