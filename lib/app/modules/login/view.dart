@@ -48,6 +48,7 @@ class LoginPage extends StatelessWidget {
             ),
             TextField(
               controller: logic.userNameController,
+              focusNode: logic.userNameFocusNode,
               style: GoogleFonts.comfortaa(fontSize: 15),
               decoration: InputDecoration(
                 filled: true,
@@ -73,6 +74,7 @@ class LoginPage extends StatelessWidget {
             Obx(
               () => TextField(
                 controller: logic.passwordController,
+                focusNode: logic.passwordFocusNode,
                 style: GoogleFonts.comfortaa(fontSize: 15),
                 decoration: InputDecoration(
                   filled: true,

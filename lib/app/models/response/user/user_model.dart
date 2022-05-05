@@ -1,3 +1,5 @@
+import 'package:where_the_food/app/data/local/manager/db_manager.dart';
+
 class UserModel {
   String? userId;
   String? fullName;

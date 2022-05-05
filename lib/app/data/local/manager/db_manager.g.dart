@@ -297,11 +297,370 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   }
 }
 
+class Cart extends DataClass implements Insertable<Cart> {
+  final int? id;
+  final String itemId;
+  final String name;
+  final String image;
+  final String price;
+  final String category;
+   int qty;
+  Cart(
+      {this.id,
+      required this.itemId,
+      required this.name,
+      required this.image,
+      required this.price,
+      required this.category,
+      required this.qty});
+  factory Cart.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return Cart(
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      itemId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}item_id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      image: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}image'])!,
+      price: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}price'])!,
+      category: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}category'])!,
+      qty: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}qty'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int?>(id);
+    }
+    map['item_id'] = Variable<String>(itemId);
+    map['name'] = Variable<String>(name);
+    map['image'] = Variable<String>(image);
+    map['price'] = Variable<String>(price);
+    map['category'] = Variable<String>(category);
+    map['qty'] = Variable<int>(qty);
+    return map;
+  }
+
+  CartsCompanion toCompanion(bool nullToAbsent) {
+    return CartsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      itemId: Value(itemId),
+      name: Value(name),
+      image: Value(image),
+      price: Value(price),
+      category: Value(category),
+      qty: Value(qty),
+    );
+  }
+
+  factory Cart.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Cart(
+      id: serializer.fromJson<int?>(json['id']),
+      itemId: serializer.fromJson<String>(json['itemId']),
+      name: serializer.fromJson<String>(json['name']),
+      image: serializer.fromJson<String>(json['image']),
+      price: serializer.fromJson<String>(json['price']),
+      category: serializer.fromJson<String>(json['category']),
+      qty: serializer.fromJson<int>(json['qty']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int?>(id),
+      'itemId': serializer.toJson<String>(itemId),
+      'name': serializer.toJson<String>(name),
+      'image': serializer.toJson<String>(image),
+      'price': serializer.toJson<String>(price),
+      'category': serializer.toJson<String>(category),
+      'qty': serializer.toJson<int>(qty),
+    };
+  }
+
+  Cart copyWith(
+          {int? id,
+          String? itemId,
+          String? name,
+          String? image,
+          String? price,
+          String? category,
+          int? qty}) =>
+      Cart(
+        id: id ?? this.id,
+        itemId: itemId ?? this.itemId,
+        name: name ?? this.name,
+        image: image ?? this.image,
+        price: price ?? this.price,
+        category: category ?? this.category,
+        qty: qty ?? this.qty,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Cart(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('name: $name, ')
+          ..write('image: $image, ')
+          ..write('price: $price, ')
+          ..write('category: $category, ')
+          ..write('qty: $qty')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, itemId, name, image, price, category, qty);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Cart &&
+          other.id == this.id &&
+          other.itemId == this.itemId &&
+          other.name == this.name &&
+          other.image == this.image &&
+          other.price == this.price &&
+          other.category == this.category &&
+          other.qty == this.qty);
+}
+
+class CartsCompanion extends UpdateCompanion<Cart> {
+  final Value<int?> id;
+  final Value<String> itemId;
+  final Value<String> name;
+  final Value<String> image;
+  final Value<String> price;
+  final Value<String> category;
+  final Value<int> qty;
+  const CartsCompanion({
+    this.id = const Value.absent(),
+    this.itemId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.image = const Value.absent(),
+    this.price = const Value.absent(),
+    this.category = const Value.absent(),
+    this.qty = const Value.absent(),
+  });
+  CartsCompanion.insert({
+    this.id = const Value.absent(),
+    required String itemId,
+    required String name,
+    required String image,
+    required String price,
+    required String category,
+    required int qty,
+  })  : itemId = Value(itemId),
+        name = Value(name),
+        image = Value(image),
+        price = Value(price),
+        category = Value(category),
+        qty = Value(qty);
+  static Insertable<Cart> custom({
+    Expression<int?>? id,
+    Expression<String>? itemId,
+    Expression<String>? name,
+    Expression<String>? image,
+    Expression<String>? price,
+    Expression<String>? category,
+    Expression<int>? qty,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (itemId != null) 'item_id': itemId,
+      if (name != null) 'name': name,
+      if (image != null) 'image': image,
+      if (price != null) 'price': price,
+      if (category != null) 'category': category,
+      if (qty != null) 'qty': qty,
+    });
+  }
+
+  CartsCompanion copyWith(
+      {Value<int?>? id,
+      Value<String>? itemId,
+      Value<String>? name,
+      Value<String>? image,
+      Value<String>? price,
+      Value<String>? category,
+      Value<int>? qty}) {
+    return CartsCompanion(
+      id: id ?? this.id,
+      itemId: itemId ?? this.itemId,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      price: price ?? this.price,
+      category: category ?? this.category,
+      qty: qty ?? this.qty,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int?>(id.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<String>(itemId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (image.present) {
+      map['image'] = Variable<String>(image.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<String>(price.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (qty.present) {
+      map['qty'] = Variable<int>(qty.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CartsCompanion(')
+          ..write('id: $id, ')
+          ..write('itemId: $itemId, ')
+          ..write('name: $name, ')
+          ..write('image: $image, ')
+          ..write('price: $price, ')
+          ..write('category: $category, ')
+          ..write('qty: $qty')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CartsTable extends Carts with TableInfo<$CartsTable, Cart> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CartsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, true,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<String?> itemId = GeneratedColumn<String?>(
+      'item_id', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _imageMeta = const VerificationMeta('image');
+  @override
+  late final GeneratedColumn<String?> image = GeneratedColumn<String?>(
+      'image', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _priceMeta = const VerificationMeta('price');
+  @override
+  late final GeneratedColumn<String?> price = GeneratedColumn<String?>(
+      'price', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
+      'category', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _qtyMeta = const VerificationMeta('qty');
+  @override
+  late final GeneratedColumn<int?> qty = GeneratedColumn<int?>(
+      'qty', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, itemId, name, image, price, category, qty];
+  @override
+  String get aliasedName => _alias ?? 'carts';
+  @override
+  String get actualTableName => 'carts';
+  @override
+  VerificationContext validateIntegrity(Insertable<Cart> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(_itemIdMeta,
+          itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
+    } else if (isInserting) {
+      context.missing(_itemIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('image')) {
+      context.handle(
+          _imageMeta, image.isAcceptableOrUnknown(data['image']!, _imageMeta));
+    } else if (isInserting) {
+      context.missing(_imageMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+          _priceMeta, price.isAcceptableOrUnknown(data['price']!, _priceMeta));
+    } else if (isInserting) {
+      context.missing(_priceMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('qty')) {
+      context.handle(
+          _qtyMeta, qty.isAcceptableOrUnknown(data['qty']!, _qtyMeta));
+    } else if (isInserting) {
+      context.missing(_qtyMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Cart map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Cart.fromData(data, attachedDatabase,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $CartsTable createAlias(String alias) {
+    return $CartsTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $UsersTable users = $UsersTable(this);
+  late final $CartsTable carts = $CartsTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [users];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [users, carts];
 }

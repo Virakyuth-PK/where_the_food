@@ -4,7 +4,7 @@ class CategoryDetailModel {
   List<Menu>? menu;
   String? sId;
   String? name;
-  int? iV;
+  String? iV;
 
   CategoryDetailModel({this.menu, this.sId, this.name, this.iV});
 
@@ -17,7 +17,7 @@ class CategoryDetailModel {
     }
     sId = json['_id'];
     name = json['name'];
-    iV = json['__v'];
+    iV = json['__v'].toString();
   }
 
   Map<String, dynamic> toJson() {

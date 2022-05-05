@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../utils/color.dart';
 import '../../widgets/button_custom.dart';
@@ -49,18 +50,19 @@ class RegisterPage extends StatelessWidget {
               ),
               TextField(
                 controller: logic.userNameController,
+                focusNode: logic.userNameFocusNode,
                 style: GoogleFonts.comfortaa(fontSize: 15),
                 decoration: InputDecoration(
                   filled: true,
                   contentPadding: const EdgeInsets.only(left: 15),
                   hintText: "Username",
-                  hintStyle:
-                      GoogleFonts.comfortaa(fontSize: 15, color: Colors.black54),
+                  hintStyle: GoogleFonts.comfortaa(
+                      fontSize: 15, color: Colors.black54),
                   fillColor: Colors.black12,
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: Colors.transparent, width: 0)),
+                      borderSide: const BorderSide(
+                          color: Colors.transparent, width: 0)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(color: halfMainColor)),
@@ -73,60 +75,77 @@ class RegisterPage extends StatelessWidget {
               ),
               TextField(
                 controller: logic.fullNameController,
+                focusNode: logic.fullNameFocusNode,
                 style: GoogleFonts.comfortaa(fontSize: 15),
                 decoration: InputDecoration(
                   filled: true,
                   contentPadding: const EdgeInsets.only(left: 15),
                   hintText: "Full Name",
-                  hintStyle:
-                      GoogleFonts.comfortaa(fontSize: 15, color: Colors.black54),
+                  hintStyle: GoogleFonts.comfortaa(
+                      fontSize: 15, color: Colors.black54),
                   fillColor: Colors.black12,
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: Colors.transparent, width: 0)),
+                      borderSide: const BorderSide(
+                          color: Colors.transparent, width: 0)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(color: halfMainColor)),
                 ),
                 maxLines: 1,
                 textInputAction: TextInputAction.next,
+                onSubmitted: (value) {
+                  logic.onPressedDateOfBirth();
+                },
               ),
               const SizedBox(
                 height: 15,
               ),
-              ButtonCustom(
-                toolTip: 'Date Of Birth',
-                onPress: () {
-                  logic.onPressedDateOfBirth();
-                },
-                child: Container(
-                  width: Get.width,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.black12,
-                      borderRadius: BorderRadius.circular(10)),
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Date Of Birth',
-                        style: GoogleFonts.comfortaa(fontSize: 15, color: Colors.black54),
+              GetBuilder<RegisterLogic>(
+                builder: (controller) {
+                  var dateText = 'Date Of Birth';
+                  if (logic.dateButtonClicked.isTrue) {
+                    dateText =
+                        DateFormat("dd MMMM yyyy").format(logic.dateOfBirthConfirmed);
+                  }
+                  return ButtonCustom(
+                    toolTip: 'Date Of Birth',
+                    onPress: () {
+                      logic.onPressedDateOfBirth();
+                    },
+                    child: Container(
+                      width: Get.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            dateText,
+                            style: GoogleFonts.comfortaa(
+                                fontSize: 15, color: Colors.black54),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ),SizedBox(height: 25,),
-              Divider(
-                  color: mainColor,
-                  thickness: 1
+                    ),
+                  );
+                },
               ),
-              SizedBox(height: 25,),
+              SizedBox(
+                height: 25,
+              ),
+              Divider(color: mainColor, thickness: 1),
+              SizedBox(
+                height: 25,
+              ),
               Obx(
                 () => TextField(
                   controller: logic.passwordController,
+                  focusNode: logic.passwordFocusNode,
                   style: GoogleFonts.comfortaa(fontSize: 15),
                   decoration: InputDecoration(
                     filled: true,
@@ -155,13 +174,17 @@ class RegisterPage extends StatelessWidget {
                   obscureText: logic.isPasswordObscureText.value,
                   maxLines: 1,
                   textInputAction: TextInputAction.next,
+                  onSubmitted: (value) {
+                    logic.passwordFocusNode.nextFocus();
+                  },
                 ),
               ),
               const SizedBox(
                 height: 15,
               ),
               TextField(
-                controller: logic.passwordController,
+                controller: logic.confirmPasswordController,
+                focusNode: logic.confirmPasswordFocusNode,
                 style: GoogleFonts.comfortaa(fontSize: 15),
                 decoration: InputDecoration(
                   filled: true,
@@ -179,6 +202,7 @@ class RegisterPage extends StatelessWidget {
                       borderSide: BorderSide(color: halfMainColor)),
                 ),
                 maxLines: 1,
+                obscureText: true,
                 textInputAction: TextInputAction.done,
               ),
               const SizedBox(
@@ -208,7 +232,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

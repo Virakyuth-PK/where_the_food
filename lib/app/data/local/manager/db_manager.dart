@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:logger/logger.dart';
+import 'package:moor/ffi.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 import 'package:path/path.dart' as p;
-import 'package:moor/ffi.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../table/cart_table.dart';
 import '../table/user_table.dart';
 
 part 'db_manager.g.dart';
@@ -17,7 +18,8 @@ openConnection() {
     return VmDatabase(file);
   });
 }
-@UseMoor(tables: [Users])
+
+@UseMoor(tables: [Users, Carts])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(QueryExecutor e) : super(e);
 
@@ -25,13 +27,28 @@ class AppDatabase extends _$AppDatabase {
 
   // Add user
   Future insertUser(User user) async {
-    Logger().i(user);
+    var checkUser = await getAllUser();
+    Logger().wtf(checkUser.length);
+    if (checkUser.length > 0) {
+      for (var item in checkUser) {
+        await deleteUser(item);
+      }
+    }
+    var checkUser1 = await getAllUser();
+    Logger().e(checkUser1.length);
     return await into(users).insertOnConflictUpdate(user);
   }
 
   // Get user
   Future getUser() async {
     var result = await select(users).getSingleOrNull();
+    return result;
+  }
+
+  // Get all user
+  Future getAllUser() async {
+    var result = await select(users).get();
+    Logger().wtf(result);
     return result;
   }
 
@@ -47,4 +64,42 @@ class AppDatabase extends _$AppDatabase {
     return await update(users).replace(user);
   }
 
+  // Insert Cart
+  Future insertCart(Cart cart) async {
+    Logger().i(cart);
+    var result = await getWhereIdCart(cart.itemId);
+    if (result != null) {
+      cart.qty = cart.qty + int.parse(result.qty);
+      return await updateCart(cart);
+    } else {
+      return await into(carts).insertOnConflictUpdate(cart);
+    }
+  }
+
+  // Delete Cart
+  Future deleteCart(Cart cart) async {
+    Logger().i(cart);
+    return await delete(carts).delete(cart);
+  }
+
+  // Update cart
+  Future updateCart(Cart cart) async {
+    Logger().i(cart);
+    return await update(carts).replace(cart);
+  }
+
+  // Get all Cart
+  Future getAllCart() async {
+    var result = await select(carts).get();
+    Logger().wtf(result);
+    return result;
+  }
+
+  // Get Where cart id is the same
+  Future getWhereIdCart(String cartId) async {
+    List<Cart> result = await getAllCart();
+    var data = result.where((element) => element.itemId == cartId);
+    Logger().i(data);
+    return data;
+  }
 }

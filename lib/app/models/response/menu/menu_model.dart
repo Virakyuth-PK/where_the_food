@@ -4,9 +4,9 @@ class Menu {
   String? name;
   String? image;
   String? description;
-  double? price;
+  String? price;
   String? category;
-  int? iV;
+  String? iV;
 
   Menu(
       {this.sId,
@@ -22,9 +22,9 @@ class Menu {
     name = json['name'];
     image = json['image'];
     description = json['description'];
-    price = json['price'];
+    price = json['price'].toString();
     category = json['category'];
-    iV = json['__v'];
+    iV = json['__v'].toString();
   }
 
   Map<String, dynamic> toJson() {
