@@ -322,7 +322,7 @@ class HomePage extends StatelessWidget {
                                           right: 0,
                                           child: ButtonCustom(
                                             onPress: () {
-                                              logic.onPressedAddToCart();
+                                              logic.onPressedAddToCart(logic.categoryDetailList[index]);
                                             },
                                             toolTip: 'Add To Cart',
                                             borderRadius: const BorderRadius

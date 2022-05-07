@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:where_the_food/app/data/api/api_utils.dart';
+import 'package:where_the_food/app/modules/cart/binding.dart';
+import 'package:where_the_food/app/modules/cart/view.dart';
 import 'package:where_the_food/app/utils/color.dart';
 import 'package:where_the_food/app/widgets/button_custom.dart';
+import 'package:where_the_food/gen/assets.gen.dart';
 
 import 'logic.dart';
 
@@ -75,13 +78,13 @@ class ProductDetailPage extends StatelessWidget {
                   width: 240,
                   height: 200,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(15),
                     ),
                     boxShadow: [
                       BoxShadow(
                           color: shadowColor,
-                          offset: Offset(0, 4),
+                          offset: const Offset(0, 4),
                           blurRadius: 4)
                     ],
                   ),
@@ -117,7 +120,7 @@ class ProductDetailPage extends StatelessWidget {
                     const Icon(Icons.error),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -126,13 +129,15 @@ class ProductDetailPage extends StatelessWidget {
                     ButtonCustom(
                       toolTip: 'Remove',
                       onPress: () {
-                        logic.qty.value--;
+                        if (logic.qty.value > 0) {
+                          logic.qty.value--;
+                        }
                       },
                       child: Container(
                         width: 25,
                         height: 25,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(5),
                           ),
                           color: halfMainColor,
@@ -146,7 +151,7 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 30,
                     ),
                     Obx(() {
@@ -159,7 +164,7 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                       );
                     }),
-                    SizedBox(
+                    const SizedBox(
                       width: 30,
                     ),
                     ButtonCustom(
@@ -171,7 +176,7 @@ class ProductDetailPage extends StatelessWidget {
                         width: 25,
                         height: 25,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(5),
                           ),
                           color: halfMainColor,
@@ -187,7 +192,7 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Obx(() {
@@ -201,7 +206,7 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                   );
                 }),
-                SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
                 Row(
@@ -216,7 +221,7 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Text(
@@ -228,35 +233,81 @@ class ProductDetailPage extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
-            bottom: 25,
-            left: 25,
-            right: 25,
-            child: ButtonCustom(
-              toolTip: 'Add To Cart',
-              onPress: () {
-                logic.onPressedAddToCart();
-              },
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  color: halfMainColor,
-                ),
-                child: Center(
-                  child: Text(
-                    'Add To Cart',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.comfortaa(
-                      color: Colors.white,
-                      fontSize: 20,
+          GetBuilder<ProductDetailLogic>(
+            builder: (logic) {
+              return Positioned(
+                bottom: 25,
+                left: 25,
+                right: 25,
+                child: Row(
+                  children: [
+                    logic.productAlreadyAdded == true
+                        ? ButtonCustom(
+                      toolTip: 'Add To Cart',
+                      onPress: () {
+                        logic.onPressedAddToCart();
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          color: Colors.white,
+                        ),
+                        padding: const EdgeInsets.all(15),
+                        child: Center(
+                          child:
+                          Image.asset(Assets.images.png.addToCart.path),
+                        ),
+                      ),
+                    )
+                        : SizedBox.shrink(),
+                    logic.productAlreadyAdded == true
+                        ? const SizedBox(
+                      width: 10,
+                    )
+                        : SizedBox.shrink(),
+                    Flexible(
+                      flex: 1,
+                      child: ButtonCustom(
+                        toolTip: logic.productAlreadyAdded == false
+                            ? 'Add To Cart'
+                            : 'Go To Cart',
+                        onPress: () {
+                          if (logic.productAlreadyAdded == false) {
+                            logic.onPressedAddToCart();
+                          } else {
+                            Get.to(() => CartPage(), binding: CartBinding());
+                          }
+                        },
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            color: halfMainColor,
+                          ),
+                          child: Center(
+                            child: Text(
+                              logic.productAlreadyAdded == false
+                                  ? 'Add To Cart'
+                                  : 'Go To Cart',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.comfortaa(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

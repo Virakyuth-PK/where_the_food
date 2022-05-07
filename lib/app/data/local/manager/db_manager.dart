@@ -67,13 +67,7 @@ class AppDatabase extends _$AppDatabase {
   // Insert Cart
   Future insertCart(Cart cart) async {
     Logger().i(cart);
-    var result = await getWhereIdCart(cart.itemId);
-    if (result != null) {
-      cart.qty = cart.qty + int.parse(result.qty);
-      return await updateCart(cart);
-    } else {
-      return await into(carts).insertOnConflictUpdate(cart);
-    }
+    return await into(carts).insertOnConflictUpdate(cart);
   }
 
   // Delete Cart
@@ -98,8 +92,15 @@ class AppDatabase extends _$AppDatabase {
   // Get Where cart id is the same
   Future getWhereIdCart(String cartId) async {
     List<Cart> result = await getAllCart();
-    var data = result.where((element) => element.itemId == cartId);
-    Logger().i(data);
-    return data;
+    if (result.isEmpty) {
+      return null;
+    }
+    for(var item in result) {
+      if (item.itemId == cartId) {
+        Logger().i(item);
+        return item;
+      }
+    }
+    return null;
   }
 }

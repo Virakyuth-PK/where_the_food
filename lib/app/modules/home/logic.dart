@@ -27,7 +27,9 @@ class HomeLogic extends GetxController {
 
   void onPressedFilter() {}
 
-  void onPressedAddToCart() {}
+  void onPressedAddToCart(List<Menu> categoryDetailList) {
+
+  }
 
   late User userLocal;
   List<CategoryModel> categoriesList = <CategoryModel>[];
