@@ -8,4 +8,5 @@ abstract class Routes {
   static const PRODUCT_DETAIL = '/product_detail';
   static const REGISTER = '/register';
   static const WELCOME = '/welcome';
+  static const FILTER_CATEGORY = '/filter_category';
 }

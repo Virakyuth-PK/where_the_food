@@ -5,6 +5,7 @@ import 'package:where_the_food/app/models/request/login/login_model.dart';
 import 'package:where_the_food/app/models/response/user/user_model.dart';
 import 'package:where_the_food/app/modules/home/binding.dart';
 import 'package:where_the_food/app/modules/home/view.dart';
+import 'package:where_the_food/app/utils/color.dart';
 
 import '../../data/local/manager/db_manager.dart';
 import '../../utils/service.dart';
@@ -33,20 +34,22 @@ class LoginLogic extends GetxController {
     }
     if (userNameController.text.isEmpty) {
       snackBarCustom(
-          message: 'Username Empty!',
-          colorText: Colors.red,
-          backgroundColor: Colors.white,
           title: 'Sorry',
-          icon: Icons.error);
+          message: 'Username Empty!',
+          colorText: Colors.white,
+          backgroundColor: halfMainColor,
+          icon: Icons.error,
+          iconColor: Colors.white);
       return;
     }
     if (passwordController.text.isEmpty) {
       snackBarCustom(
-          message: 'Password Empty!',
-          colorText: Colors.red,
-          backgroundColor: Colors.white,
           title: 'Sorry',
-          icon: Icons.error);
+          message: 'Password Empty!',
+          colorText: Colors.white,
+          backgroundColor: halfMainColor,
+          icon: Icons.error,
+          iconColor: Colors.white);
       return;
     }
     await Api().postLogin(

@@ -10,6 +10,7 @@ import 'package:where_the_food/app/models/request/register/register_model.dart';
 import '../../data/api/api.dart';
 import '../../data/local/manager/db_manager.dart';
 import '../../models/response/user/user_model.dart';
+import '../../utils/color.dart';
 import '../../utils/service.dart';
 import '../../widgets/button_custom.dart';
 import '../../widgets/calendar_dialog_content_custom.dart';
@@ -73,53 +74,61 @@ class RegisterLogic extends GetxController {
     }
     if (userNameController.text.isEmpty) {
       snackBarCustom(
+          title: 'Sorry',
           message: 'Username Empty!',
-          colorText: Colors.red,
-          backgroundColor: Colors.white,
-          title: 'Sorry',
-          icon: Icons.error);
+          colorText: Colors.white,
+          backgroundColor: halfMainColor,
+          icon: Icons.error,
+          iconColor: Colors.white);
       return;
-    }if (fullNameController.text.isEmpty) {
+    }
+    if (fullNameController.text.isEmpty) {
       snackBarCustom(
+          title: 'Sorry',
           message: 'FullName Empty!',
-          colorText: Colors.red,
-          backgroundColor: Colors.white,
-          title: 'Sorry',
-          icon: Icons.error);
+          colorText: Colors.white,
+          backgroundColor: halfMainColor,
+          icon: Icons.error,
+          iconColor: Colors.white);
       return;
-    }if (passwordController.text.isEmpty) {
+    }
+    if (passwordController.text.isEmpty) {
       snackBarCustom(
+          title: 'Sorry',
           message: 'Password Empty!',
-          colorText: Colors.red,
-          backgroundColor: Colors.white,
-          title: 'Sorry',
-          icon: Icons.error);
+          colorText: Colors.white,
+          backgroundColor: halfMainColor,
+          icon: Icons.error,
+          iconColor: Colors.white);
       return;
-    }if (confirmPasswordController.text.isEmpty) {
+    }
+    if (confirmPasswordController.text.isEmpty) {
       snackBarCustom(
+          title: 'Sorry',
           message: 'Confirm Password Empty!',
-          colorText: Colors.red,
-          backgroundColor: Colors.white,
-          title: 'Sorry',
-          icon: Icons.error);
+          colorText: Colors.white,
+          backgroundColor: halfMainColor,
+          icon: Icons.error,
+          iconColor: Colors.white);
       return;
-    }if (passwordController.text != confirmPasswordController.text) {
+    }
+    if (passwordController.text != confirmPasswordController.text) {
       snackBarCustom(
-          message: 'Password does not match!',
-          colorText: Colors.red,
-          backgroundColor: Colors.white,
           title: 'Sorry',
-          icon: Icons.error);
+          message: 'Password does not match!',
+          colorText: Colors.white,
+          backgroundColor: halfMainColor,
+          icon: Icons.error,
+          iconColor: Colors.white);
       return;
     }
 
     await Api().postRegister(
       RegisterModel(
-        username: userNameController.text,
-        fullName: fullNameController.text,
-        dateOfBirth: DateFormat("yyyy-MM-dd").format(dateOfBirthConfirmed),
-        password: passwordController.text
-      ),
+          username: userNameController.text,
+          fullName: fullNameController.text,
+          dateOfBirth: DateFormat("yyyy-MM-dd").format(dateOfBirthConfirmed),
+          password: passwordController.text),
       onSuccess: (UserModel data) async {
         await locator<AppDatabase>().insertUser(User.fromJson(data.toJson()));
         Get.offAll(() => HomePage(), binding: HomeBinding());

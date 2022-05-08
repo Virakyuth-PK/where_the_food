@@ -5,8 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:where_the_food/app/data/api/api_utils.dart';
 import 'package:where_the_food/app/modules/cart/binding.dart';
 import 'package:where_the_food/app/modules/cart/view.dart';
-import 'package:where_the_food/app/modules/product_detail/binding.dart';
-import 'package:where_the_food/app/modules/product_detail/view.dart';
 import 'package:where_the_food/app/utils/color.dart';
 import 'package:where_the_food/app/widgets/button_custom.dart';
 import 'package:where_the_food/gen/assets.gen.dart';
@@ -15,9 +13,7 @@ import 'logic.dart';
 
 class HomePage extends StatelessWidget {
   final logic = Get.find<HomeLogic>();
-  final state = Get
-      .find<HomeLogic>()
-      .state;
+  final state = Get.find<HomeLogic>().state;
 
   @override
   Widget build(BuildContext context) {
@@ -191,174 +187,195 @@ class HomePage extends StatelessWidget {
                 return Expanded(
                   child: PageView.builder(
                     controller: logic.pageController,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return GridView.builder(
                           gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                           ),
                           itemCount: logic
                               .categoryDetailList[logic.selectedCategoryIndex]
                               .length,
                           itemBuilder: (BuildContext context, int index) {
-                            return ButtonCustom(
-                              toolTip: 'Item $index',
-                              onPress: () {
-                                logic.onPressedProduct(logic
-                                    .categoryDetailList[logic
-                                    .selectedCategoryIndex][index]);
-                              },
-                              child: Card(
-                                margin: const EdgeInsets.all(10),
-                                elevation: 2.0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                color: Colors.white,
-                                child: Stack(
-                                  alignment: AlignmentDirectional.bottomCenter,
-                                  children: [
-                                    CachedNetworkImage(
-                                      imageUrl: testingBaseUrl +
-                                          logic
-                                              .categoryDetailList[logic
-                                              .selectedCategoryIndex][index]
-                                              .image!,
-                                      imageBuilder: (context, imageProvider) =>
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                10),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                      placeholder: (context, url) =>
-                                          SizedBox(
-                                            height: 150,
-                                            child: Center(
-                                              child: SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child: CircularProgressIndicator(
-                                                  color: mainColor,
-                                                  strokeWidth: 3,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                      errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                    ),
-                                    Stack(
-                                      children: [
-                                        Opacity(
-                                          opacity: 0.5,
-                                          child: Container(
-                                            height: 60,
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(5),
-                                                topRight: Radius.circular(5),
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight: Radius.circular(
-                                                    10),
-                                              ),
-                                              color: Colors.black45,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned.fill(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 120,
-                                                    child: Text(
-                                                      logic
-                                                          .categoryDetailList[logic
-                                                          .selectedCategoryIndex]
-                                                      [index]
-                                                          .name!,
-                                                      textAlign: TextAlign.left,
-                                                      style: GoogleFonts
-                                                          .comfortaa(
-                                                        color: Colors.white,
-                                                        fontSize: 12.5,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '\$ ' +
-                                                        logic
-                                                            .categoryDetailList[logic
+                            return Container(
+                              margin: const EdgeInsets.all(10.0),
+                              child: Stack(
+                                children: [
+                                  ButtonCustom(
+                                    toolTip: logic
+                                        .categoryDetailList[
+                                            logic.selectedCategoryIndex][index]
+                                        .name!,
+                                    onPress: () {
+                                      logic.onPressedProduct(logic
+                                              .categoryDetailList[
+                                          logic.selectedCategoryIndex][index]);
+                                    },
+                                    child: Card(
+                                      elevation: 2.0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      color: Colors.white,
+                                      child: Stack(
+                                        alignment:
+                                            AlignmentDirectional.bottomCenter,
+                                        children: [
+                                          CachedNetworkImage(
+                                            imageUrl: testingBaseUrl +
+                                                logic
+                                                    .categoryDetailList[logic
                                                             .selectedCategoryIndex]
                                                         [index]
-                                                            .price
-                                                            .toString(),
-                                                    textAlign: TextAlign.left,
-                                                    style: GoogleFonts
-                                                        .comfortaa(
-                                                      color: Colors.white,
-                                                      fontSize: 10,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                        Positioned(
-                                          bottom: 0,
-                                          right: 0,
-                                          child: ButtonCustom(
-                                            onPress: () {
-                                              logic.onPressedAddToCart(logic.categoryDetailList[index]);
-                                            },
-                                            toolTip: 'Add To Cart',
-                                            borderRadius: const BorderRadius
-                                                .only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(0),
-                                              bottomLeft: Radius.circular(0),
-                                              bottomRight: Radius.circular(10),
-                                            ),
-                                            child: Container(
-                                              width: 30,
-                                              height: 30,
-                                              decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(0),
-                                                  bottomLeft: Radius.circular(
-                                                      0),
-                                                  bottomRight: Radius.circular(
-                                                      10),
+                                                    .image!,
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                 ),
-                                                color: Colors.white,
-                                              ),
-                                              padding: const EdgeInsets.all(
-                                                  7.5),
-                                              child: Center(
-                                                child: Image.asset(Assets
-                                                    .images.png.addToCart.path),
                                               ),
                                             ),
+                                            placeholder: (context, url) =>
+                                                SizedBox(
+                                              height: 150,
+                                              child: Center(
+                                                child: SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: mainColor,
+                                                    strokeWidth: 3,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
                                           ),
-                                        ),
-                                      ],
+                                          Stack(
+                                            children: [
+                                              Opacity(
+                                                opacity: 0.5,
+                                                child: Container(
+                                                  height: 60,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(5),
+                                                      topRight:
+                                                          Radius.circular(5),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10),
+                                                    ),
+                                                    color: Colors.black45,
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned.fill(
+                                                  child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 120,
+                                                      child: Text(
+                                                        logic
+                                                            .categoryDetailList[
+                                                                logic
+                                                                    .selectedCategoryIndex]
+                                                                [index]
+                                                            .name!,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: GoogleFonts
+                                                            .comfortaa(
+                                                          color: Colors.white,
+                                                          fontSize: 12.5,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '\$ ' +
+                                                          logic
+                                                              .categoryDetailList[
+                                                                  logic
+                                                                      .selectedCategoryIndex]
+                                                                  [index]
+                                                              .price
+                                                              .toString(),
+                                                      textAlign: TextAlign.left,
+                                                      style:
+                                                          GoogleFonts.comfortaa(
+                                                        color: Colors.white,
+                                                        fontSize: 10,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Positioned(
+                                    bottom: 4,
+                                    right: 4,
+                                    child: ButtonCustom(
+                                      onPress: () {
+                                        logic.onPressedAddToCart(
+                                            logic.categoryDetailList[logic
+                                                .selectedCategoryIndex][index]);
+                                      },
+                                      toolTip: 'Add To Cart',
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(0),
+                                        bottomLeft: Radius.circular(0),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(0),
+                                            bottomLeft: Radius.circular(0),
+                                            bottomRight: Radius.circular(10),
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                        padding: const EdgeInsets.all(7.5),
+                                        child: Center(
+                                          child: Image.asset(
+                                              Assets.images.png.addToCart.path),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           });

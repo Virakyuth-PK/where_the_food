@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.virakyuthpk.where_the_food">
    <application
-        android:label="where_the_food"
+        android:label="WTF"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
