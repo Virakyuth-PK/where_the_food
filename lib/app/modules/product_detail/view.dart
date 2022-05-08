@@ -11,11 +11,26 @@ import 'package:where_the_food/gen/assets.gen.dart';
 
 import 'logic.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> with WidgetsBindingObserver {
   final logic = Get.find<ProductDetailLogic>();
+
   final state = Get
       .find<ProductDetailLogic>()
       .state;
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      await logic.checkProductAdded();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

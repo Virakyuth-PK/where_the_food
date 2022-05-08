@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:where_the_food/app/modules/home/logic.dart';
 
 import '../../data/api/api.dart';
@@ -9,44 +10,29 @@ import 'state.dart';
 class FilterCategoryLogic extends GetxController {
   final FilterCategoryState state = FilterCategoryState();
   final homeLogic = Get.find<HomeLogic>();
-  List<int> listFilter = <int>[];
-  List<CategoryModel> categoriesList = <CategoryModel>[];
-  List<List<Menu>> categoryDetailListFilter = <List<Menu>>[];
+  List<CategoryModel> listFilter = <CategoryModel>[];
+  List<List<Menu>> categoryDetailList = <List<Menu>>[];
 
   @override
   Future<void> onInit() async {
     super.onInit();
     listFilter.addAll(homeLogic.listFilter);
     update();
-    for (var indexListFilter in listFilter) {
-      categoriesList.add(homeLogic.categoriesList[indexListFilter]);
-      update();
-    }
-    for (var indexListFilter in listFilter) {
-      if (homeLogic.categoryDetailList[indexListFilter].isEmpty) {
-        for (var indexCategoryList in categoriesList) {
-          await getCategoryDetail(indexListFilter, indexCategoryList.sId!);
-          update();
-        }
-      } else {
-        categoryDetailListFilter.add(homeLogic.categoryDetailList[indexListFilter]);
-        update();
-      }
-    }
-
+    await getCategoryDetail();
     homeLogic.listFilter.clear();
     update();
   }
 
-  getCategoryDetail(index, String sId) async {
-    await Api().getCategoriesDetail(
-        categoryId: sId,
-        onSuccess: (data) {
-          var result = data;
-          // for (var item in data) {
-          //   categoryDetailListFilter[index].addAll(data);
+  getCategoryDetail() async {
+    for (var eachCategory in listFilter) {
+      await Api().getCategoriesDetail(
+          categoryId: eachCategory.sId!,
+          onSuccess: (data) {
+            var eachCategoryDetail = <Menu>[];
+            eachCategoryDetail.addAll(data);
+            categoryDetailList.add(eachCategoryDetail);
             update();
-          // }
-        });
+          });
+    }
   }
 }

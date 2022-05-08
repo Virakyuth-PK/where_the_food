@@ -54,4 +54,9 @@ class CartLogic extends GetxController {
       sumTotal();
     });
   }
+
+  Future<void> clearCart() async {
+    await locator<AppDatabase>().clearCart();
+    await updateCartList();
+  }
 }

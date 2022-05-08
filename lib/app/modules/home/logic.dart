@@ -27,7 +27,7 @@ class HomeLogic extends GetxController {
   late User userLocal;
   List<CategoryModel> categoriesList = <CategoryModel>[];
   List<List<Menu>> categoryDetailList = <List<Menu>>[];
-  List<int> listFilter = <int>[];
+  List<CategoryModel> listFilter = <CategoryModel>[];
 
   @override
   void onInit() async {
@@ -75,7 +75,7 @@ class HomeLogic extends GetxController {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Container(
@@ -92,7 +92,7 @@ class HomeLogic extends GetxController {
                                   var thisItemIsAddedFilter = false;
                                   if (listFilter.isNotEmpty) {
                                     for (var item in listFilter) {
-                                      if (item == index) {
+                                      if (item == categoriesList[index]) {
                                         thisItemIsAddedFilter = true;
                                       }
                                     }
@@ -101,9 +101,9 @@ class HomeLogic extends GetxController {
                                     toolTip: categoriesList[index].name!,
                                     onPress: () {
                                       if (thisItemIsAddedFilter) {
-                                        listFilter.remove(index);
+                                        listFilter.remove(categoriesList[index]);
                                       } else {
-                                        listFilter.add(index);
+                                        listFilter.add(categoriesList[index]);
                                       }
                                       update();
                                     },
@@ -120,7 +120,7 @@ class HomeLogic extends GetxController {
                                               color: thisItemIsAddedFilter
                                                   ? shadowColor
                                                   : Colors.transparent,
-                                              offset: Offset(0, 4),
+                                              offset: const Offset(0, 4),
                                               blurRadius: 4)
                                         ],
                                       ),
@@ -143,12 +143,12 @@ class HomeLogic extends GetxController {
                                             ),
                                           ),
                                           thisItemIsAddedFilter
-                                              ? Icon(
+                                              ? const Icon(
                                                   Icons
                                                       .check_circle_outline_rounded,
                                                   color: Colors.white,
                                                 )
-                                              : SizedBox.shrink()
+                                              : const SizedBox.shrink()
                                         ],
                                       ),
                                     ),
@@ -179,7 +179,7 @@ class HomeLogic extends GetxController {
                             boxShadow: [
                               BoxShadow(
                                   color: shadowColor,
-                                  offset: Offset(0, 4),
+                                  offset: const Offset(0, 4),
                                   blurRadius: 4)
                             ],
                           ),
@@ -295,7 +295,7 @@ class HomeLogic extends GetxController {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Text(
@@ -325,7 +325,7 @@ class HomeLogic extends GetxController {
                             boxShadow: [
                               BoxShadow(
                                   color: shadowColor,
-                                  offset: Offset(0, 4),
+                                  offset: const Offset(0, 4),
                                   blurRadius: 4)
                             ],
                           ),
@@ -383,7 +383,7 @@ class HomeLogic extends GetxController {
 
   Future<void> onPressedCategory(int index) async {
     pageController.animateToPage(index,
-        duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+        duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
     selectedCategoryIndex = index;
     if (categoryDetailList[selectedCategoryIndex].length == 0) {
       await getCategoryDetail(index);

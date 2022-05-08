@@ -76,6 +76,11 @@ class AppDatabase extends _$AppDatabase {
     return await delete(carts).delete(cart);
   }
 
+  // Clear Cart
+  Future clearCart() async {
+    return await delete(carts).go();
+  }
+
   // Update cart
   Future updateCart(Cart cart) async {
     Logger().i(cart);
