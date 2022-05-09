@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:where_the_food/app/data/local/manager/db_manager.dart';
 import 'package:where_the_food/app/modules/home/logic.dart';
 
@@ -9,7 +10,7 @@ import 'state.dart';
 class ProductDetailLogic extends GetxController {
   final ProductDetailState state = ProductDetailState();
   final homeLogic = Get.find<HomeLogic>();
-  late Menu selectedProduct;
+  late MenuModel selectedProduct;
   var qty = 1.obs;
   var productAlreadyAdded = false;
   Cart? cartAdded;
@@ -42,11 +43,20 @@ class ProductDetailLogic extends GetxController {
   }
 
   checkProductAdded() async {
+    Logger().e("checkProductAdded");
+    cartAdded = null;
+    productAlreadyAdded = false;
+    Logger().e("cartAdded :: $cartAdded");
+    Logger().e("productAlreadyAdded :: $productAlreadyAdded");
+    update();
     cartAdded =
         await locator<AppDatabase>().getWhereIdCart(selectedProduct.sId!);
     update();
+    Logger().e("db cartAdded :: $cartAdded");
     if (cartAdded != null) {
+      Logger().e("if cartAdded :: $cartAdded");
       productAlreadyAdded = true;
+      Logger().e("if productAlreadyAdded :: $productAlreadyAdded");
       update();
     }
   }

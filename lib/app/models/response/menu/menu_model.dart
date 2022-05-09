@@ -1,5 +1,5 @@
 
-class Menu {
+class MenuModel {
   String? sId;
   String? name;
   String? image;
@@ -8,7 +8,7 @@ class Menu {
   String? category;
   String? iV;
 
-  Menu(
+  MenuModel(
       {this.sId,
         this.name,
         this.image,
@@ -17,7 +17,7 @@ class Menu {
         this.category,
         this.iV});
 
-  Menu.fromJson(Map<String, dynamic> json) {
+  MenuModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
     image = json['image'];

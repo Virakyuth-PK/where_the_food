@@ -130,6 +130,7 @@ class RegisterLogic extends GetxController {
           dateOfBirth: DateFormat("yyyy-MM-dd").format(dateOfBirthConfirmed),
           password: passwordController.text),
       onSuccess: (UserModel data) async {
+        data.token = "Bearer ${data.token}";
         await locator<AppDatabase>().insertUser(User.fromJson(data.toJson()));
         Get.offAll(() => HomePage(), binding: HomeBinding());
       },

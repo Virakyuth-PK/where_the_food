@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:where_the_food/app/data/api/api.dart';
 import 'package:where_the_food/app/data/local/manager/db_manager.dart';
 import 'package:where_the_food/app/models/response/category/category_model.dart';
 import 'package:where_the_food/app/modules/filter_category/binding.dart';
 import 'package:where_the_food/app/modules/filter_category/view.dart';
 import 'package:where_the_food/app/modules/product_detail/view.dart';
+import 'package:where_the_food/app/modules/welcome/binding.dart';
+import 'package:where_the_food/app/modules/welcome/view.dart';
 import 'package:where_the_food/app/utils/color.dart';
 import 'package:where_the_food/app/utils/service.dart';
 
@@ -22,11 +25,11 @@ class HomeLogic extends GetxController {
   var searchController = TextEditingController();
   var selectedCategoryIndex = 0;
   var pageController = PageController();
-  Menu? selectedProduct;
+  MenuModel? selectedProduct;
   Cart? cartAdded;
   late User userLocal;
   List<CategoryModel> categoriesList = <CategoryModel>[];
-  List<List<Menu>> categoryDetailList = <List<Menu>>[];
+  List<List<MenuModel>> categoryDetailList = <List<MenuModel>>[];
   List<CategoryModel> listFilter = <CategoryModel>[];
 
   @override
@@ -101,7 +104,8 @@ class HomeLogic extends GetxController {
                                     toolTip: categoriesList[index].name!,
                                     onPress: () {
                                       if (thisItemIsAddedFilter) {
-                                        listFilter.remove(categoriesList[index]);
+                                        listFilter
+                                            .remove(categoriesList[index]);
                                       } else {
                                         listFilter.add(categoriesList[index]);
                                       }
@@ -221,7 +225,7 @@ class HomeLogic extends GetxController {
     );
   }
 
-  Future<void> onPressedAddToCart(Menu product) async {
+  Future<void> onPressedAddToCart(MenuModel product) async {
     await checkProductAdded(product);
     update();
     if (cartAdded != null) {
@@ -252,7 +256,7 @@ class HomeLogic extends GetxController {
     }
   }
 
-  checkProductAdded(Menu product) async {
+  checkProductAdded(MenuModel product) async {
     cartAdded = await locator<AppDatabase>().getWhereIdCart(product.sId!);
     update();
   }
@@ -314,7 +318,12 @@ class HomeLogic extends GetxController {
                       ),
                       ButtonCustom(
                         toolTip: 'Logout',
-                        onPress: () {},
+                        onPress: () async {
+                          await locator<AppDatabase>().deleteUser();
+                          await locator<AppDatabase>().clearCart();
+                          Get.offAll(() => WelcomePage(),
+                              binding: WelcomeBinding());
+                        },
                         child: Container(
                           height: 50,
                           decoration: BoxDecoration(
@@ -372,7 +381,7 @@ class HomeLogic extends GetxController {
       onSuccess: (data) async {
         categoriesList.addAll(data);
         for (var item in data) {
-          List<Menu> eachListCategoryDetail = <Menu>[];
+          List<MenuModel> eachListCategoryDetail = <MenuModel>[];
           categoryDetailList.add(eachListCategoryDetail);
         }
         await getCategoryDetail(0);
@@ -392,6 +401,7 @@ class HomeLogic extends GetxController {
   }
 
   getCategoryDetail(index) async {
+    Logger().e("getCategoryDetail home");
     await Api().getCategoriesDetail(
         categoryId: categoriesList[index].sId!,
         onSuccess: (data) {
@@ -400,7 +410,7 @@ class HomeLogic extends GetxController {
         });
   }
 
-  void onPressedProduct(Menu categoryDetailList) {
+  void onPressedProduct(MenuModel categoryDetailList) {
     selectedProduct = categoryDetailList;
     update();
     Get.to(() => ProductDetailPage(), binding: ProductDetailBinding());

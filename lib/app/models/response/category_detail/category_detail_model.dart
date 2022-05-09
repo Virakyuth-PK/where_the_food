@@ -1,7 +1,7 @@
 import '../menu/menu_model.dart';
 
 class CategoryDetailModel {
-  List<Menu>? menu;
+  List<MenuModel>? menu;
   String? sId;
   String? name;
   String? iV;
@@ -10,9 +10,9 @@ class CategoryDetailModel {
 
   CategoryDetailModel.fromJson(Map<String, dynamic> json) {
     if (json['menu'] != null) {
-      menu = <Menu>[];
+      menu = <MenuModel>[];
       json['menu'].forEach((v) {
-        menu!.add(Menu.fromJson(v));
+        menu!.add(MenuModel.fromJson(v));
       });
     }
     sId = json['_id'];

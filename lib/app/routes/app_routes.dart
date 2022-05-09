@@ -9,4 +9,5 @@ abstract class Routes {
   static const REGISTER = '/register';
   static const WELCOME = '/welcome';
   static const FILTER_CATEGORY = '/filter_category';
+  static const HISTORY = '/history';
 }

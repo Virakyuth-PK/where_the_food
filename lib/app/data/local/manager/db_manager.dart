@@ -30,9 +30,7 @@ class AppDatabase extends _$AppDatabase {
     var checkUser = await getAllUser();
     Logger().wtf(checkUser.length);
     if (checkUser.length > 0) {
-      for (var item in checkUser) {
-        await deleteUser(item);
-      }
+      await deleteUser();
     }
     var checkUser1 = await getAllUser();
     Logger().e(checkUser1.length);
@@ -53,9 +51,8 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // Delete user
-  Future deleteUser(User user) async {
-    Logger().i(user);
-    return await delete(users).delete(user);
+  Future deleteUser() async {
+    return await delete(users).go();
   }
 
   // Update user
@@ -100,7 +97,7 @@ class AppDatabase extends _$AppDatabase {
     if (result.isEmpty) {
       return null;
     }
-    for(var item in result) {
+    for (var item in result) {
       if (item.itemId == cartId) {
         Logger().i(item);
         return item;

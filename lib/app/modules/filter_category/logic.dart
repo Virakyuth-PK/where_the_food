@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:where_the_food/app/modules/home/logic.dart';
@@ -10,8 +11,8 @@ import 'state.dart';
 class FilterCategoryLogic extends GetxController {
   final FilterCategoryState state = FilterCategoryState();
   final homeLogic = Get.find<HomeLogic>();
-  List<CategoryModel> listFilter = <CategoryModel>[];
-  List<List<Menu>> categoryDetailList = <List<Menu>>[];
+  late List<CategoryModel> listFilter = <CategoryModel>[];
+  late List<List<MenuModel>> categoryDetailList = <List<MenuModel>>[];
 
   @override
   Future<void> onInit() async {
@@ -27,8 +28,8 @@ class FilterCategoryLogic extends GetxController {
     for (var eachCategory in listFilter) {
       await Api().getCategoriesDetail(
           categoryId: eachCategory.sId!,
-          onSuccess: (data) {
-            var eachCategoryDetail = <Menu>[];
+          onSuccess: (data) async {
+            var eachCategoryDetail = <MenuModel>[];
             eachCategoryDetail.addAll(data);
             categoryDetailList.add(eachCategoryDetail);
             update();

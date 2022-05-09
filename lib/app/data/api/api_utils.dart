@@ -8,3 +8,4 @@ const login = 'login';
 const register = 'register';
 const categories = 'categories';
 const category = 'category';
+const orders = 'orders';

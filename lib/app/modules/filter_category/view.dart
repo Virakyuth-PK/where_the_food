@@ -26,10 +26,13 @@ class FilterCategoryPage extends StatelessWidget {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(25.0),
+        padding: const EdgeInsets.only(
+          left: 25,
+          right: 25,
+        ),
         child: GetBuilder<FilterCategoryLogic>(
           builder: (logic) {
-            if (logic.categoryDetailList.isNotEmpty) {
+            if (logic.categoryDetailList.length == logic.listFilter.length) {
               return ListView.builder(
                 shrinkWrap: true,
                 itemCount: logic.listFilter.length,
@@ -41,10 +44,10 @@ class FilterCategoryPage extends StatelessWidget {
                       ),
                       Text(
                         logic.listFilter[indexCategory].name!,
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.fredokaOne(
                           color: Colors.black87,
-                          fontSize: 15,
+                          fontSize: 20,
                         ),
                       ),
                       const SizedBox(

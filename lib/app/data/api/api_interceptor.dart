@@ -7,24 +7,22 @@ import 'package:logger/logger.dart';
 
 import '../../modules/login/binding.dart';
 import '../../modules/login/view.dart';
+import '../../utils/service.dart';
+import '../local/manager/db_manager.dart';
 
 getDioInterceptor(Dio dio) {
   return InterceptorsWrapper(
     onError: (e, handler) async {
-      var msg = "asdasda";
+      var msg = "";
       Logger().wtf(e.response!.statusCode);
       if (e.response != null) {
-        if (e.response!.data != "") {
-          msg = e.response!.data["message"].toString();
-        } else {
-          if (e.response!.statusMessage != "") {
-            msg = e.response!.statusMessage!;
-          }
-        }
         if (e.response!.statusCode == 403) {
           if (e.response != null || e.response!.data != "") {
             msg = e.response!.data["error"].toString();
           }
+        }
+        if (e.response!.statusCode == 401) {
+          msg = e.response!.statusMessage!;
         }
       } else {
         if (e.message != '') {
@@ -38,23 +36,24 @@ getDioInterceptor(Dio dio) {
       }
 
       await EasyLoading.showError(msg);
-      if (e.response?.statusCode == 401) {
-        if (e.response == null || e.response!.data == "") {
-          Logger().e(e.response);
-          // await deleteAllDB();
-          Get.offAll(() => LoginPage(), binding: LoginBinding());
-        }
+
+      if (e.response!.statusCode == 401) {
+        await locator<AppDatabase>().deleteUser();
+        await locator<AppDatabase>().clearCart();
+        Get.offAll(() => LoginPage(), binding: LoginBinding());
       }
       return handler.reject(e);
     },
     onRequest: (options, handler) async {
       await EasyLoading.show(
           status: 'Loading ...', maskType: EasyLoadingMaskType.black);
+
       return handler.next(options);
     },
     onResponse: (e, handler) async {
       await EasyLoading.showSuccess("Successful",
           duration: const Duration(microseconds: 1));
+
       return handler.next(e);
     },
   );

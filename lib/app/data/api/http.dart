@@ -10,45 +10,43 @@ import 'package:where_the_food/app/data/api/api_utils.dart';
 import 'api_interceptor.dart';
 
 class Http {
-  static Dio? _dio;
 
   static Dio _create({bool useProxy = false, String? token}) {
-    if (_dio == null) {
-      _dio = Dio();
-      _dio!.options.headers["accept"] = "application/json";
-      _dio!.options.headers['accept'] = 'application/json';
-      _dio!.options.headers['content-type'] = 'multipart/form-data';
-      _dio!.options.headers['content-type'] = 'application/json';
-      _dio!.options.sendTimeout = SEND_TIMEOUT;
-      _dio!.options.receiveTimeout = RECEIVE_TIMEOUT;
-      _dio!.options.connectTimeout = CONNECT_TIMEOUT;
-      _dio!.interceptors.add(PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseBody: true,
-          responseHeader: false,
-          error: true,
-          compact: true,
-          maxWidth: 90));
-      _dio!.interceptors.add(getDioInterceptor(_dio!));
-      if (token != null) {
-        _dio!.options.headers['authorization'] = token;
-      }
-      if (useProxy) {
-        (_dio?.httpClientAdapter as DefaultHttpClientAdapter)
-            .onHttpClientCreate = (client) {
-          client.badCertificateCallback =
-              (X509Certificate cert, String host, int port) {
-            return true;
-          };
-          client.findProxy = (uri) {
-            return testingBaseUrl;
-          };
-          return null;
-        };
-      }
+    Dio? _dio = Dio();
+    _dio.options.headers["accept"] = "application/json";
+    _dio.options.headers['accept'] = 'application/json';
+    _dio.options.headers['content-type'] = 'multipart/form-data';
+    _dio.options.headers['content-type'] = 'application/json';
+    _dio.options.sendTimeout = SEND_TIMEOUT;
+    _dio.options.receiveTimeout = RECEIVE_TIMEOUT;
+    _dio.options.connectTimeout = CONNECT_TIMEOUT;
+    _dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90));
+    _dio.interceptors.add(getDioInterceptor(_dio));
+    if (token != null) {
+      Logger().wtf("token in dio $token");
+      _dio.options.headers['authorization'] = token;
     }
-    return _dio!;
+    if (useProxy) {
+      (_dio.httpClientAdapter as DefaultHttpClientAdapter)
+          .onHttpClientCreate = (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+        client.findProxy = (uri) {
+          return testingBaseUrl;
+        };
+        return null;
+      };
+    }
+    return _dio;
   }
 
   Future<void> get(String url,
@@ -62,7 +60,7 @@ class Http {
           .get(testingBaseUrl + url,
               queryParameters: params, options: Options(headers: headers))
           .then((value) async => {await onSuccess(value.data)});
-          // .catchError((error) => onError!(error));
+      // .catchError((error) => onError!(error));
     } catch (error, stacktrace) {
       Logger().e("Exception occurred: $error stackTrace: $stacktrace");
     }
@@ -75,11 +73,12 @@ class Http {
       Map<String, dynamic>? headers,
       String? token}) async {
     try {
+      Logger().e("here post $token");
       await _create(token: token)
           .post(testingBaseUrl + url,
               data: body, options: Options(headers: headers))
           .then((value) async => {await onSuccess(value.data)});
-          // .catchError((error) => onError!(error));
+      // .catchError((error) => onError!(error));
     } catch (error, stacktrace) {
       Logger().e("Exception occurred: $error stackTrace: $stacktrace");
     }

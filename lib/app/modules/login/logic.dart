@@ -56,6 +56,7 @@ class LoginLogic extends GetxController {
       LoginModel(
           username: userNameController.text, password: passwordController.text),
       onSuccess: (UserModel data) async {
+        data.token = "Bearer ${data.token}";
         await locator<AppDatabase>().insertUser(User.fromJson(data.toJson()));
         Get.offAll(() => HomePage(), binding: HomeBinding());
       },
