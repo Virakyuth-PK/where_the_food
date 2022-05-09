@@ -1,7 +1,7 @@
 name: where_the_food
-description: A new Flutter project.
+description: a simple application about grocery shopping.
 
-version: 1.0.0+1
+version: 1.0.0+09052022
 
 environment:
   sdk: ">=2.16.2 <3.0.0"

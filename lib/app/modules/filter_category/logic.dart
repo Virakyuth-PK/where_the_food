@@ -1,6 +1,5 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:where_the_food/app/modules/home/logic.dart';
 
 import '../../data/api/api.dart';
@@ -25,6 +24,8 @@ class FilterCategoryLogic extends GetxController {
   }
 
   getCategoryDetail() async {
+    await EasyLoading.show(
+        status: 'Loading ...', maskType: EasyLoadingMaskType.black);
     for (var eachCategory in listFilter) {
       await Api().getCategoriesDetail(
           categoryId: eachCategory.sId!,
@@ -33,7 +34,12 @@ class FilterCategoryLogic extends GetxController {
             eachCategoryDetail.addAll(data);
             categoryDetailList.add(eachCategoryDetail);
             update();
-          });
+          },
+          showLoading: false);
+      if (categoryDetailList.length == listFilter.length) {
+        await EasyLoading.showSuccess("Successful",
+            duration: const Duration(microseconds: 1));
+      }
     }
   }
 }

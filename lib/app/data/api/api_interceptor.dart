@@ -10,7 +10,7 @@ import '../../modules/login/view.dart';
 import '../../utils/service.dart';
 import '../local/manager/db_manager.dart';
 
-getDioInterceptor(Dio dio) {
+getDioInterceptor(Dio dio, {required bool showLoading}) {
   return InterceptorsWrapper(
     onError: (e, handler) async {
       var msg = "";
@@ -35,8 +35,9 @@ getDioInterceptor(Dio dio) {
         }
       }
 
-      await EasyLoading.showError(msg);
-
+      if (showLoading) {
+        await EasyLoading.showError(msg);
+      }
       if (e.response!.statusCode == 401) {
         await locator<AppDatabase>().deleteUser();
         await locator<AppDatabase>().clearCart();
@@ -45,15 +46,17 @@ getDioInterceptor(Dio dio) {
       return handler.reject(e);
     },
     onRequest: (options, handler) async {
+    if(showLoading) {
       await EasyLoading.show(
           status: 'Loading ...', maskType: EasyLoadingMaskType.black);
-
+    }
       return handler.next(options);
     },
     onResponse: (e, handler) async {
-      await EasyLoading.showSuccess("Successful",
-          duration: const Duration(microseconds: 1));
-
+      if(showLoading) {
+        await EasyLoading.showSuccess("Successful",
+            duration: const Duration(microseconds: 1));
+      }
       return handler.next(e);
     },
   );

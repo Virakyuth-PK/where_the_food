@@ -407,7 +407,7 @@ class HomeLogic extends GetxController {
         onSuccess: (data) {
           categoryDetailList[index].addAll(data);
           update();
-        });
+        }, showLoading: true);
   }
 
   void onPressedProduct(MenuModel categoryDetailList) {

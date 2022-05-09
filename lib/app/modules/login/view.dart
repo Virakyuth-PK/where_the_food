@@ -103,6 +103,9 @@ class LoginPage extends StatelessWidget {
                 obscureText: logic.isPasswordObscureText.value,
                 maxLines: 1,
                 textInputAction: TextInputAction.done,
+                onSubmitted: (data)  {
+                  logic.onPressedLogin();
+                },
               ),
             ),
             const SizedBox(

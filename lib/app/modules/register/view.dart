@@ -204,6 +204,9 @@ class RegisterPage extends StatelessWidget {
                 maxLines: 1,
                 obscureText: true,
                 textInputAction: TextInputAction.done,
+                onSubmitted: (data){
+                  logic.onPressedRegister();
+                },
               ),
               const SizedBox(
                 height: 80,

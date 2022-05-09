@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/logger.dart';
 import 'package:where_the_food/app/data/api/api_utils.dart';
 import 'package:where_the_food/app/data/local/manager/db_manager.dart';
@@ -22,7 +23,7 @@ class Api {
     await Http().post(login, body: loginModel, onSuccess: (data) {
       var userModel = UserModel.fromJson(data);
       return onSuccess(userModel);
-    });
+    }, showLoading: true);
   }
 
   Future<void> postRegister(
@@ -32,7 +33,7 @@ class Api {
     await Http().post(register, body: registerModel, onSuccess: (data) {
       var userModel = UserModel.fromJson(data);
       return onSuccess(userModel);
-    });
+    }, showLoading: true);
   }
 
   Future<void> getCategories({
@@ -44,16 +45,19 @@ class Api {
         list.add(CategoryModel.fromJson(item));
       }
       return onSuccess(list);
-    });
+    }, showLoading: true);
   }
 
   Future<void> getCategoriesDetail(
       {required String categoryId,
-      required Function(List<MenuModel>) onSuccess}) async {
-    await Http().get(category + "/" + categoryId, onSuccess: (data) {
+      required Function(List<MenuModel>) onSuccess,
+      required bool showLoading}) async {
+
+    await Http().get(category + "/" + categoryId, onSuccess: (data) async {
+
       var categoryDetail = CategoryDetailModel.fromJson(data);
       return onSuccess(categoryDetail.menu!);
-    });
+    }, showLoading: showLoading);
   }
 
   Future<void> postMakeOrder(
@@ -65,21 +69,19 @@ class Api {
         onSuccess: (data) {
       var orderModel = OrderModel.fromJson(data);
       return onSuccess(orderModel);
-    });
+    }, showLoading: true);
   }
 
   Future<void> getAllOrder(
-      {
-      required Function(List<OrderHistoryModel>) onSuccess}) async {
+      {required Function(List<OrderHistoryModel>) onSuccess}) async {
     var user = await locator<AppDatabase>().getUser();
     Logger().w(user);
-    await Http().get(orders, token: user.token,
-        onSuccess: (data) {
+    await Http().get(orders, token: user.token, onSuccess: (data) {
       List<OrderHistoryModel> result = <OrderHistoryModel>[];
       for (var item in data) {
         result.add(OrderHistoryModel.fromJson(item));
       }
       return onSuccess(result);
-    });
+    }, showLoading: true);
   }
 }
